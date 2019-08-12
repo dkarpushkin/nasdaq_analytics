@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Price difference for {{ ticker }} from {{ from_date }} to {{ to_date }}</title>
+</head>
+<body>
+<div>
+    <h3>Price difference for {{ ticker }} from {{ from_date }} to {{ to_date }}</h3>
+    <table>
+        <thead><tr><td>Open</td><td>High</td><td>Low</td><td>Close</td></tr></thead>
+        <tbody>
+        <tr>
+            <td>{{ open_price_diff|floatformat:-2 }}</td>
+            <td>{{ high_price_diff|floatformat:-2 }}</td>
+            <td>{{ low_price_diff|floatformat:-2 }}</td>
+            <td>{{ close_price_diff|floatformat:-2 }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

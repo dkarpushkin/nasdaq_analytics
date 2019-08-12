@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Historical data for {{ ticker }}</title>
+</head>
+<body>
+    <div>
+        <h3>Historical data for {{ ticker }}</h3>
+        <table>
+            <thead><tr><td>Дата</td><td>Open</td><td>High</td><td>Low</td><td>Close</td><td>Volume</td></tr></thead>
+            <tbody>
+                {% for hd in object_list %}
+                    <tr>
+                        <td>{{ hd.date }}</td>
+                        <td>{{ hd.open_price }}</td>
+                        <td>{{ hd.high_price }}</td>
+                        <td>{{ hd.low_price }}</td>
+                        <td>{{ hd.close_price }}</td>
+                        <td>{{ hd.volume }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
