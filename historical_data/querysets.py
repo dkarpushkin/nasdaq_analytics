@@ -20,12 +20,30 @@ class HistoricalRecordQuerySet(QuerySet):
         if price_type not in ('open', 'high', 'low', 'close'):
             return None
 
-        result = self.raw(
-            f'''SELECT MIN(ABS(hd1.date - hd2.date)) FROM historical_data_historicalrecord AS hd1
+        sub_query = f'''SELECT
+                    hd1 as hd1, hd2 as hd2,
+                    ABS(hd1.date - hd2.date) AS date_diff,
+                    ABS(hd1.{price_type}_price - hd2.{price_type}_price) AS price_diff
+                FROM historical_data_historicalrecord AS hd1
                 INNER JOIN historical_data_historicalrecord AS hd2
-                ON ABS(hd1.{price_type}_price - hd2.{price_type}_price) > %s
-                WHERE hd1.ticker = %s AND hd2.ticker = %s''',
-            [value, ticker, ticker]
+                ON hd1.ticker = hd2.ticker
+                    AND ABS(hd1.{price_type}_price - hd2.{price_type}_price) > %s
+                    AND hd1.date < hd2.date
+                WHERE hd1.ticker = %s
+                ORDER BY date_diff ASC, hd1.date ASC'''
+
+        result = self.raw(
+            f'''SELECT *
+                FROM ({sub_query}) AS differences''',
+            [value, ticker]
         )
 
-        return list(result)
+        r = list(result)
+        to_records = self.in_bulk([row.second_id for row in result])
+
+        return ({
+            'from_record': row,
+            'to_record': to_records.get(row.second_id),
+            'date_diff': row.date_diff,
+            'price_diff': row.price_diff
+        } for row in result)

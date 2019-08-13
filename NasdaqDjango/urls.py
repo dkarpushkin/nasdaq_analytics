@@ -16,8 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from historical_data.views import HistoricalRecordsTemplateView, HistoricalRecordsJsonView, PriceAnalyticsView, \
-    PriceAnalyticsJsonView, PriceAnalyticsTemplateView
+from historical_data.views import (
+    HistoricalRecordsTemplateView, HistoricalRecordsJsonView, PriceAnalyticsJsonView, PriceAnalyticsTemplateView,
+    PriceDeltaJsonView, PriceDeltaTemplateView
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,5 +28,8 @@ urlpatterns = [
     path('api/<str:ticker>/', HistoricalRecordsJsonView.as_view()),
 
     path('<str:ticker>/analytics', PriceAnalyticsTemplateView.as_view()),
-    path('api/<str:ticker>/', PriceAnalyticsJsonView.as_view()),
+    path('api/<str:ticker>/analytics', PriceAnalyticsJsonView.as_view()),
+
+    path('<str:ticker>/delta', PriceDeltaTemplateView.as_view()),
+    path('api/<str:ticker>/delta', PriceDeltaJsonView.as_view()),
 ]

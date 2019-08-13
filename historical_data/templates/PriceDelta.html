@@ -2,9 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Price delta </title>
+    <title>Price deltas for {{ ticker }}</title>
 </head>
 <body>
-
+<div>
+    {% if deltas %}
+    <h3>Price delta for {{ ticker }}</h3>
+    <ul>
+        {% for delta in deltas %}
+        <li>
+            <td>Price changed for {{ delta.price_diff }} from {{ delta.from_record.date }} to {{ delta.to_record.date }}</td>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <h3>Price deltas for {{ ticker }} not found</h3>
+    {% endif %}
+</div>
 </body>
 </html>
